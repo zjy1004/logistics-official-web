@@ -1,9 +1,7 @@
 <template>
    <div class="layout">
      <v-header />
-     <div class="con">
       <router-view></router-view>
-     </div>
      <v-footer />
    </div>
 </template>

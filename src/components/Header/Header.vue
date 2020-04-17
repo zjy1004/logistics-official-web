@@ -1,12 +1,20 @@
 <template>
    <div class="header">
      <div class="header-wrap">
-       <div class="logo"></div>
-       <ul class="tab">
+       <div class="h-logo"></div>
+       <ul class="h-tab">
         <li :class="{'li-active' : index === activeIndex}" v-for="(item, index) in tabList" :key="index" @click="handleClick(index)">{{item.name}}</li>
       </ul>
-      <div class="title">
-        <span>商家后台</span><span class="line"></span><span>物流货源推荐</span>
+      <div class="h-left">
+        <ul class="l-text">
+          <li class="t-left">商家后台</li>
+          <li class="t-line"></li>
+          <li class="t-right">物流货源推荐</li>
+        </ul>
+        <div class="h-phone">
+          <div class="p-icon"><img src="../../images/Telephone-icon.png" alt=""></div>
+          <div class="p-num">400-008-8122</div>
+        </div>
       </div>
      </div>
    </div>
@@ -78,23 +86,23 @@ export default {
 <style scoped lang="less">
 .header {
   height: 100px;
-  width: 100%;
+  width: 1920px;
   background: #fff;
+  padding: 0 360px;
   .header-wrap {
     width: 1200px;
     height: 100%;
-    margin: 0 auto;
     display: flex;
-    .logo {
+    .h-logo {
       width: 160px;
       height: 48px;
       margin-top: 26px;
       background: url('../../images/logo.png') no-repeat;
       background-size:100% 100%;
     }
-    .tab {
+    .h-tab {
       display: flex;
-      width: 338px;
+      min-width: 338px;
       height: 30px;
       align-items: center;
       justify-content: space-between;
@@ -114,23 +122,56 @@ export default {
       .li-active {
         color: #5982F7;
         border-bottom: 4px solid rgba(58,98,244,1);
+        transition: all 0.3s;
       }
     }
-    .title {
-      width:169px;
-      height:15px;
-      font-size:14px;
-      font-family:Microsoft YaHei;
-      font-weight:400;
-      color:rgba(107,111,126,1);
-      margin-top: 34px;
-      margin-left: 191px;
-      .line {
-        display: inline-block;
-        margin: 0 4px;
-        width:1px;
-        height:14px;
-        background:rgba(199,202,214,1);
+    .h-left {
+      display: flex;
+      width: 388px;
+      margin-left: 190px;
+      justify-content: space-between;
+      .l-text {
+        // width: auto;
+        height:15px;
+        font-size:14px;
+        font-weight:400;
+        color:rgba(107,111,126,1);
+        margin-top: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        li {
+          line-height: 15px;
+          height: 15px;
+          width: auto;
+        }
+        .t-line {
+          width:1px;
+          height:14px;
+          margin-left: 6px;
+          background:rgba(199,202,214,1);
+        }
+        .t-right {
+          margin-left: 6px;
+        }
+      }
+      .h-phone {
+        margin-top: 32px;
+        display: flex;
+        .p-icon {
+          width:18px;
+          height:17px;
+        }
+        .p-num {
+          // min-width:143px;
+          height:17px;
+          font-size:22px;
+          margin-left: 8px;
+          font-family:Arial;
+          font-weight:bold;
+          color:rgba(63,66,77,1);
+          line-height:20px;
+        }
       }
     }
   }
