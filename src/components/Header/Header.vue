@@ -86,9 +86,11 @@ export default {
 <style scoped lang="less">
 .header {
   height: 100px;
-  width: 1920px;
   background: #fff;
-  padding: 0 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1200px;
   .header-wrap {
     width: 1200px;
     height: 100%;

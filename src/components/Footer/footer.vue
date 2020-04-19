@@ -58,11 +58,15 @@ export default {
 
 <style scoped lang="less">
 .footer {
-  width:1920px;
+  min-width:1200px;
   height:394px;
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  flex-direction: column;
   background:rgba(33,35,48,1);
   .f-con {
-    margin: 0 auto;
+    // margin: 0 auto;
     width: 1200px;
     height: 262px;
     display: flex;
@@ -148,7 +152,7 @@ export default {
   }
   .f-bottom {
     width: 1200px;
-    margin: 0 auto;
+    // margin: 0 auto;
     margin-top: 39px;
     height:14px;
     font-size:12px;

@@ -36,25 +36,33 @@ export default {
 
 <style scoped lang="less">
 .index {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  width: 1920px;
-  .index-banner {
-    width: 100%;
-    height: 550px;
+  // display: flex;
+  // flex-direction: column;
+  // width: 1920px;
+  // .index-banner {
+  //   // width: 100%;
+  //   // height: 550px;
+  //   img {
+  //     width: 100%;
+  //     height: 100%;
+  //   }
+  // }
+  min-width: 1200px;
+  .banner {
+    // width: 100%;
+    // height: 550px;
+    // width: 1200px;
     img {
       width: 100%;
       height: 100%;
     }
   }
   .index-sever {
-    width: 1920px;
     height: 460px;
-    // display: flex;
+    display: flex;
     background:rgba(249,250,255,1);
-    // padding: 80px 360px;
-    position: relative;
+    align-items: center;
+    justify-content: center;
     .sever-item {
       width: 300px;
       height: 300px;
@@ -83,26 +91,6 @@ export default {
         opacity:0.3;
         transition: all 1s;
       }
-    }
-    .item-position1 {
-      position: absolute;
-      top: 80px;
-      left: 360px;
-    }
-    .item-position2 {
-      position: absolute;
-      top: 80px;
-      left: 660px;
-    }
-    .item-position3 {
-      position: absolute;
-      top: 80px;
-      left: 960px;
-    }
-    .item-position4 {
-      position: absolute;
-      top: 80px;
-      left: 1260px;
     }
     .sever-item:hover .s-inner-img{
       transform: scale(1.2) ;
