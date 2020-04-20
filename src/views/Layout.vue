@@ -23,16 +23,15 @@ export default {
 
 <style scoped lang="less">
 .layout {
-  // display: flex;
-  // flex: 1;
-  // flex-direction: column;
-  // height: 100%;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   font-size: 16px;
+  min-width: 1200px;
   .con {
-    // display: flex;
-    // flex: 1;
-    // flex-direction: column;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     background: #fff;
   }
 }
