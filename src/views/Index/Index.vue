@@ -213,7 +213,6 @@ export default {
     .sever-item {
       width: 300px;
       height: 300px;
-      cursor: pointer;
       overflow: hidden;
       position: relative;
       .s-inner-img {
@@ -223,7 +222,7 @@ export default {
         overflow: hidden;
         top: 0;
         left: 0;
-        transition: all 0.6s;
+        transition: all 0.5s;
       }
       .s-inner-item {
         width:300px;
@@ -233,11 +232,12 @@ export default {
         top: 0;
         left: 0;
         color:rgba(255,255,255,1);
-        background:rgba(0,0,0,0.2);
-        transition: all 0.6s;
+        background:rgba(0,0,0,0.3);
+        transition: all 1s;
+        cursor: pointer;
         .item-tltle {
           font-size:18px;
-          transition: all 0.6s;
+          transition: all 0.5s;
           position: absolute;
           top: 185px;
           left: 30px;
@@ -248,17 +248,19 @@ export default {
           height:4px;
           background:rgba(244,109,0,1);
           // overflow: hidden;
-          transition: all 0.6s;
+          transition: all 0.5s;
           position: absolute;
           top: 213px;
           left: 30px;
           // top: 168px; left: 136px;
         }
         .item-text {
+          max-width: 240px;
+          text-align: center;
           font-size:14px;
           opacity: 0;
           position: absolute;
-          transition: all 0.6s;
+          transition: all 0.5s;
           top: 235px;
           left: 30px;
           right: 30px;
@@ -269,11 +271,11 @@ export default {
     .sever-item:hover .s-inner-img{
       transform: scale(1.2) ;
     }
-    .sever-item:hover .s-inner-item {
+    .s-inner-item:hover {
       background:rgba(0,0,0,0);
         .item-tltle { top: 140px; left: 115px; }
         .item-icon { top: 168px; left: 136px;}
-        .item-text { top: 190px; left: 37px; right: 37px; opacity: 1; }
+        .item-text { top: 190px; opacity: 1; }
         // .item-tltle { top: 185px; left: 30px; }
         // .item-icon { top: 213px; left: 30px;}
         // .item-text { top: 235px; left: 30px; right: 30px; opacity: 1; }
