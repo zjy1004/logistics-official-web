@@ -18,7 +18,19 @@
      <div class="q-route">
        <div class="route-wrap">
          <div id="map-container" class="r-map">1</div>
-         <div class="r-info">2</div>
+         <div class="r-info">
+           <div class="i-top">
+             <span class="t-span-left">运单号:</span>
+             <span class="t-span-right">289840466019</span>
+             <span class="t-span-left" style="margin-left: 94px;">签收时间:</span>
+             <span class="t-span-right">2019-09-05 12:32:01</span>
+           </div>
+           <div class="i-bottom">
+             <div class="b-text">杭州市</div>
+             <div class="b-icon"><img src="../../images/orange.png" alt=""></div>
+             <div class="b-text">北京市</div>
+           </div>
+         </div>
          <div class="r-desc">
            <time-line
             :dataArr=activities
@@ -46,6 +58,7 @@ export default {
         { i: '已签收', status: 1, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
         { i: '运输中', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
         { i: '分拣中', status: 1, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
+        { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
         { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
         { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
         { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
@@ -298,7 +311,25 @@ export default {
       .r-info {
         width: 1000px;
         height: 124px;
-        border: 1px solid #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-bottom: 1px solid rgba(241,241,241,1);
+        .i-top {
+          height: 20px;
+          line-height: 20px;
+          .t-span-left { font-size:14px; color:rgba(150,154,169,1); }
+          .t-span-right { font-size:14px; color:rgb(10,22,51,1); margin-left: 13px; }
+        }
+        .i-bottom {
+          margin-top: 18px;
+          width: 370px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .b-text { font-size:18px; color:rgba(10,22,51,1); }
+          .b-icon { img { width: 84px; height: 4px; } }
+        }
       }
       .r-desc {
         width: 1000px;

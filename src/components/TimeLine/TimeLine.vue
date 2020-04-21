@@ -69,10 +69,11 @@ export default {
   height: 100%;
   display: flex;
   .status {
-    width: 100px;
+    // width: 100px;
+    margin-right: 35px;
     .status-item {
-      width: 100%;
-      height: 43.5px;
+      // width: 100%;
+      height: 40px;
       font-size: 14px;
       color: #909399;
       // margin-bottom: 25px;
@@ -87,6 +88,7 @@ export default {
   .el-timeline-item {
     height: 40px;
     // line-height: 50px;
+    padding-bottom: 0;
   }
   .el-timeline-item__wrapper {
     display: flex;
@@ -95,16 +97,16 @@ export default {
   }
   .el-timeline-item__timestamp {
     font-size: 14px;
-    color: #909399;
+    color: #969AA9;
   }
   .el-timeline-item__content {
-    color: #909399;
+    color: #969AA9;
     padding-top: 4px;
-    margin-left: 30px;
+    margin-left: 63px;
     font-size: 14px;
   }
   .tl-active {
-    color: #000!important;
+    color: #0A1633!important;
     font-weight: 500;
   }
 }
