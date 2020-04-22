@@ -58,8 +58,8 @@ export default {
 
 <style scoped lang="less">
 .footer {
-  min-width:1200px;
-  height:394px;
+  min-width: 1280px;
+  height: 394px;
   display: flex;
   // justify-content: center;
   align-items: center;

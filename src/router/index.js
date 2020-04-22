@@ -27,6 +27,12 @@ const routes = [
     name: 'AboutUs',
     component: () => import('@/views/AboutUs/AboutUs'),
     meta: {auth: true, title: '关于我们'}
+  },
+  {
+    path: '/apply-for-cooperation',
+    name: 'ApplyForCooperation',
+    component: () => import('@/views/ApplyForCooperation/ApplyForCooperation'),
+    meta: {auth: true, title: '申请合作'}
   }
   // {
   //   path: '/',

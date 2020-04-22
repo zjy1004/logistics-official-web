@@ -176,7 +176,7 @@ export default {
   },
   methods: {
     toApplyForPartner () {
-      this.$router.push({name: ''})
+      this.$router.push({name: 'ApplyForCooperation'})
     }
   }
 }
@@ -184,7 +184,7 @@ export default {
 
 <style scoped lang="less">
 .index {
-  min-width: 1200px;
+  min-width: 1280px;
   .item-title-icon {
     width: 30px;
     height: 5px;
@@ -201,8 +201,9 @@ export default {
     line-height:39px;
   }
   .index-banner {
-    min-width: 1200px;
-    // height: 550px;
+    min-width: 1280px;
+    height: 550px;
+    // img { min-width: 1280px; max-height: 550px; }
   }
   .index-sever {
     height: 460px;
@@ -247,7 +248,6 @@ export default {
           width:28px;
           height:4px;
           background:rgba(244,109,0,1);
-          // overflow: hidden;
           transition: all 0.5s;
           position: absolute;
           top: 213px;

@@ -26,7 +26,7 @@ export default {
   components: {},
   data () {
     return {
-      activeIndex: 0,
+      activeIndex: '',
       tabList: [
         {tabIndex: 0, name: '首页'},
         {tabIndex: 1, name: '物流查询'},
@@ -75,6 +75,9 @@ export default {
         case 'AboutUs':
           this.activeIndex = 3
           break
+        case 'ApplyForCooperation':
+          this.activeIndex = ''
+          break
         default:
           break
       }
@@ -90,7 +93,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 1200px;
+  min-width: 1280px;
   .header-wrap {
     width: 1200px;
     height: 100%;
@@ -165,8 +168,6 @@ export default {
           height:17px;
         }
         .p-num {
-          // min-width:143px;
-          height:17px;
           font-size:22px;
           margin-left: 8px;
           font-family:Arial;

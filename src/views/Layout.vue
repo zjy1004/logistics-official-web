@@ -27,7 +27,7 @@ export default {
   flex-direction: column;
   overflow-y: auto;
   font-size: 16px;
-  min-width: 1200px;
+  min-width: 1280px;
   .con {
     display: flex;
     flex: 1;

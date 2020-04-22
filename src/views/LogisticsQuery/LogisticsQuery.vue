@@ -27,7 +27,9 @@
            </div>
            <div class="i-bottom">
              <div class="b-text">杭州市</div>
-             <div class="b-icon"><img src="../../images/orange.png" alt=""></div>
+             <div class="b-icon">
+               <!-- <img src="../../images/orange.png" alt=""> -->
+               </div>
              <div class="b-text">北京市</div>
            </div>
          </div>
@@ -243,13 +245,12 @@ export default {
 
 <style scoped lang="less">
 .logistics-query {
-  min-width: 1200px;
+  min-width: 1280px;
   .q-search {
-    width: 100%;
+    min-width: 1280px;
     height: 310px;
-    // background: url('../../images/bg360.jpg') no-repeat;
-    // background-size: 100% 100%;
-    background: #000;
+    background: url('../../images/物流查询.png') no-repeat;
+    background-size: 100% 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -328,7 +329,12 @@ export default {
           align-items: center;
           justify-content: space-between;
           .b-text { font-size:18px; color:rgba(10,22,51,1); }
-          .b-icon { img { width: 84px; height: 4px; } }
+          .b-icon {
+            width: 84px;
+            height: 4px;
+            background: url('../../images/orange.png') no-repeat;
+            background-size: 100% 100%;
+          }
         }
       }
       .r-desc {

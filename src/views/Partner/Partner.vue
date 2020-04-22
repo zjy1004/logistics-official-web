@@ -1,6 +1,11 @@
 <template>
    <div class="partner">
-     合作伙伴
+     <div class="p-banner">
+       <img src="../../images/合作伙伴banner.jpg" alt="">
+     </div>
+     <div class="p-map">
+       <img src="../../images/map.png" alt="">
+     </div>
    </div>
 </template>
 
@@ -16,8 +21,16 @@ export default {
 
 <style scoped lang="less">
 .partner {
-  height: 500px;
-  line-height: 500px;
-  text-align: center;
+  min-width: 1280px;
+  .p-banner {
+    min-width: 100%;
+    height: 422px;
+    // img { min-width: 1280px; max-height: 422px;}
+  }
+  .p-map {
+    min-width: 1280px;
+    height: 768px;
+    // img { min-width: 1280px; max-height: 768px;}
+  }
 }
 </style>
