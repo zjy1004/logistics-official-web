@@ -72,12 +72,9 @@ export default {
     // width: 100px;
     margin-right: 35px;
     .status-item {
-      // width: 100%;
-      height: 40px;
+      height: 49px;
       font-size: 14px;
       color: #909399;
-      // margin-bottom: 25px;
-      -text-align: center;
     }
   }
 }
@@ -86,12 +83,13 @@ export default {
 // @import '../../style/base.less';
 .time-line {
   .el-timeline-item {
-    height: 40px;
+    height: 50px;
     // line-height: 50px;
     padding-bottom: 0;
   }
   .el-timeline-item__wrapper {
     display: flex;
+    padding-left: 50px;
   }
   .el-timeline-item__timestamp.is-top {
   }

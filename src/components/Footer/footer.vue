@@ -12,17 +12,17 @@
          <div class="r-text">
            <div class="t-title r-title">支持与服务</div>
            <div class="t-con">
-             <div class="common-text">首页</div>
-             <div class="common-text">物流查询</div>
-             <div class="common-text">合作伙伴</div>
-             <div class="common-text">关于我们</div>
+             <div class="common-text con-text" @click="toPage(0)">首页</div>
+             <div class="common-text con-text" @click="toPage(1)">物流查询</div>
+             <div class="common-text con-text" @click="toPage(2)">合作伙伴</div>
+             <div class="common-text con-text" @click="toPage(3)">关于我们</div>
            </div>
          </div>
          <div class="r-code">
            <div class="c-title r-title">关注中驰物联</div>
            <div class="c-img">
              <div class="img-item">
-               <div class="img-wrap"><img src="../../images/云驿通客户二维码.png" alt=""></div>
+               <div class="img-wrap"><img src="../../images/物流商二维码.png" alt=""></div>
                <div class="img-info common-text">物流商APP</div>
               </div>
              <div class="img-item ml50">
@@ -34,11 +34,6 @@
                <div class="img-info common-text">云驿通客户小程序</div>
               </div>
            </div>
-           <!-- <div class="c-info">
-             <div class="info-first common-text">物流商APP</div>
-             <div class="info-second common-text">云驿通客户APP</div>
-             <div class="info-third common-text">云驿通客户小程序</div>
-           </div> -->
          </div>
        </div>
      </div>
@@ -52,6 +47,26 @@ export default {
   components: {},
   data () {
     return {}
+  },
+  methods: {
+    toPage (val) {
+      switch (val) {
+        case 0:
+          this.$router.push({name: 'Index'})
+          break
+        case 1:
+          this.$router.push({name: 'LogisticsQuery'})
+          break
+        case 2:
+          this.$router.push({name: 'Partner'})
+          break
+        case 3:
+          this.$router.push({name: 'AboutUs'})
+          break
+        default:
+          break
+      }
+    }
   }
 }
 </script>
@@ -77,6 +92,9 @@ export default {
       font-weight:400;
       opacity:0.75;
     }
+    // .common-text:hover {
+    //   color: #fff;
+    // }
     .c-left {
       width: 600px;
       .l-phone {
@@ -99,7 +117,6 @@ export default {
       .r-title {
         height:19px;
         font-size:18px;
-        font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(255,255,255,1);
       }
@@ -109,6 +126,12 @@ export default {
         .t-con {
           margin-top: 29px;
           line-height: 26px;
+          .con-text {
+            cursor: pointer;
+          }
+          .con-text:hover {
+            color: #fff;
+          }
         }
       }
       .r-code {

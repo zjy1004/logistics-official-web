@@ -7,9 +7,9 @@
       </ul>
       <div class="h-left">
         <ul class="l-text">
-          <li class="t-left">商家后台</li>
-          <li class="t-line"></li>
-          <li class="t-right">物流货源推荐</li>
+          <li class="t-left"><a href="https://wl.autozi.com/">商家后台</a></li>
+          <!-- <li class="t-line"></li>
+          <li class="t-right">物流货源推荐</li> -->
         </ul>
         <div class="h-phone">
           <div class="p-icon"><img src="../../images/Telephone-icon.png" alt=""></div>
@@ -149,6 +149,14 @@ export default {
           line-height: 15px;
           height: 15px;
           width: auto;
+        }
+        .t-left {
+          a {
+            text-decoration: none;
+            font-size:14px;
+            font-weight:400;
+            color:rgba(107,111,126,1);
+          }
         }
         .t-line {
           width:1px;

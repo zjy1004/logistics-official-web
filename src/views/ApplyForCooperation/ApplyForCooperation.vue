@@ -4,7 +4,7 @@
      <div class="af-content">
        <div class="con-wrap">
          <div class="w-nav">
-          <span style="cursor: pointer;">首页</span>
+          <span style="cursor: pointer;" @click="toIndex()">首页</span>
           <span style="margin: 0 2px; font-size: 16px;">></span>
           <span>申请合作</span>
         </div>
@@ -26,7 +26,7 @@
               </el-form-item>
             </div>
             <div class="select-class">
-              <el-form-item label="所在区域" prop="province">
+              <el-form-item label="所在区域:">
                 <el-select v-model="form.province" placeholder="请选择省">
                   <el-option
                     v-for="(item, index) in areaPList"
@@ -59,7 +59,7 @@
               </el-form-item>
             </div>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
+              <el-button type="primary" @click="submitForm('form')">提交申请</el-button>
               <el-button @click="resetForm('form')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -70,6 +70,7 @@
 </template>
 
 <script type="">
+import ApplyForAjax from '@/api/ApplyFor/ApplyFor.js'
 export default {
   name: 'ApplyForCooperation',
   components: {},
@@ -79,10 +80,14 @@ export default {
         componyName: '',
         user: '',
         phone: '',
-        date2: '',
+        province: '',
+        city: '',
+        area: '',
         mark: ''
       },
       areaPList: [],
+      areaCList: [],
+      areaQList: [],
       rules: {
         componyName: [
           // { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -91,17 +96,75 @@ export default {
         phone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' },
           { min: 11, max: 11, message: '手机号不合法', trigger: 'blur' }
-        ],
-        date2: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
         ]
       }
     }
   },
+  created () {
+    let obj = {}
+    obj.areaParentCode = 0
+    this.QueryAreaList(obj, 'province')
+  },
+  computed: {
+    provinceCode () {
+      return this.form.province
+    },
+    cityCode () {
+      return this.form.city
+    }
+  },
+  watch: {
+    provinceCode (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        // this.form.addressSaveData.provinceCode = newVal
+        this.areaPList.forEach(item => {
+          if (this.form.city !== item) {
+            this.form.city = ''
+          } else {
+
+          }
+        })
+        this.QueryAreaList({areaParentCode: newVal}, 'city')
+      }
+    },
+    cityCode (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        // this.form.addressSaveData.cityCode = newVal
+        this.areaCList.forEach(item => {
+          if (this.form.area !== item) {
+            this.form.area = ''
+          } else {
+
+          }
+        })
+        this.QueryAreaList({areaParentCode: newVal}, 'area')
+      }
+    }
+  },
   methods: {
+    QueryAreaList (val, flag) { // 省市
+      ApplyForAjax.QueryAreaList(val).then(res => {
+        if (res.code === 200) {
+          if (flag === 'province') {
+            this.areaPList = res.data
+          }
+          if (flag === 'city') {
+            this.areaCList = res.data
+          }
+          if (flag === 'area') {
+            this.areaQList = res.data
+          }
+        }
+      })
+    },
+    toIndex () {
+      this.$router.push({name: 'Index'})
+    },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(this.form)
+          debugger
           alert('submit!')
         } else {
           console.log('error submit!!')
@@ -111,6 +174,9 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+      this.form.province = ''
+      this.form.city = ''
+      this.form.area = ''
     }
   }
 }
@@ -163,10 +229,36 @@ export default {
             font-size: 14px;
           }
         }
+        .el-button {
+          padding: 0;
+          width: 120px;
+          height: 32px;
+          line-height: 32px;
+          text-align: center;
+          border: none;
+          background:rgba(150,162,190,1);
+          border-radius:4px;
+          color: #fff;
+        }
+        .el-button--primary {
+          background:rgba(89,130,247,1);
+        }
+        .el-button+.el-button {
+          margin-left: 12px;
+        }
       }
     }
     .input-class { .el-input { width: 290px; } }
     .select-class {
+      .el-form-item__content {
+        display: flex;
+        width: 465px;
+        // justify-content: space-between;
+        .el-select {
+          display: block;
+          margin-right: 8px;
+        }
+      }
       .el-input {
         width: 150px;
         .el-input__inner {
@@ -174,11 +266,12 @@ export default {
           line-height: 34px;
           color: #0A1633;
           font-size: 14px;
+          padding-right: 0;
         }
       }
     }
     .mark {
-      .el-textarea { width: 465px; }
+      .el-textarea { width: 466px; }
       .el-textarea__inner {
         border:1px solid rgba(227,230,242,1);
         border-radius:2px;

@@ -4,7 +4,7 @@
      <div class="us-info">
        <div class="info-wrap">
         <div class="w-nav">
-          <span style="cursor: pointer;">首页</span>
+          <span style="cursor: pointer;" @click="toIndex()">首页</span>
           <span style="margin: 0 2px; font-size: 16px;">></span>
           <span>关于我们</span>
         </div>
@@ -69,6 +69,10 @@ export default {
     }
   },
   methods: {
+    toIndex () {
+      debugger
+      this.$router.push({name: 'Index'})
+    },
     mapInit () {
       MapLoader().then(AMap => {
         this.map = new AMap.Map('map-us', this.mapOption)

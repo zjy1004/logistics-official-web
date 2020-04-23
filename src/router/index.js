@@ -45,7 +45,10 @@ let router = new Router({
   history: false,
   hashbang: true,
   base: process.env.ROUTER_BASE,
-  routes
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    return {x: 0, y: 0}
+  }
 })
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
