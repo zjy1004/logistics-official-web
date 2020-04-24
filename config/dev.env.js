@@ -4,6 +4,7 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  API_BASE_URL: '"http://logistics.b2bex.com"',
+  // API_BASE_URL: '"http://logistics.b2bex.com"',
+  API_BASE_URL: '"http://172.16.2.198:8085"', // 琳雁
   DEBUG_MODE: true
-})
+});

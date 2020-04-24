@@ -111,11 +111,14 @@ export function GetResponse (url, params = {}, withCredentials = false) {
 
 // 封装postFromData请求
 export function PostFromData (url, data = {}) {
+  let loadingInstance = loading()
   return new Promise((resolve, reject) => {
     axios.post(url, data, axiosFromData).then(response => {
       resolve(response.data)
+      loadingInstance.close()
     }).catch(error => {
       reject(error)
+      loadingInstance.close()
     })
   })
 }

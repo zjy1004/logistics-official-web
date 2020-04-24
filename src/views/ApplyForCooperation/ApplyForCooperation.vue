@@ -11,23 +11,23 @@
          <div class="w-form">
            <el-form :model="form" :rules="rules" ref="form" label-width="100px">
              <div class="input-class">
-               <el-form-item label="公司名称:" prop="componyName">
-                <el-input v-model="form.componyName" placeholder="请输入公司名称"></el-input>
+               <el-form-item label="公司名称:" prop="companyName">
+                <el-input v-model="form.companyName" placeholder="请输入公司名称"></el-input>
               </el-form-item>
             </div>
             <div class="input-class">
-               <el-form-item label="联系人:" prop="user">
-                <el-input v-model="form.user" placeholder="请输入联系人"></el-input>
+               <el-form-item label="联系人:" prop="contactPerson">
+                <el-input v-model="form.contactPerson" placeholder="请输入联系人"></el-input>
               </el-form-item>
             </div>
             <div class="input-class">
-               <el-form-item label="联系电话:" prop="phone">
-                <el-input v-model="form.phone" maxlength="11" placeholder="请输入联系电话"></el-input>
+               <el-form-item label="联系电话:" prop="contactPhone">
+                <el-input v-model="form.contactPhone" maxlength="11" placeholder="请输入联系电话"></el-input>
               </el-form-item>
             </div>
             <div class="select-class">
               <el-form-item label="所在区域:">
-                <el-select v-model="form.province" placeholder="请选择省">
+                <el-select v-model="provinceCode" placeholder="请选择省">
                   <el-option
                     v-for="(item, index) in areaPList"
                     :key="index"
@@ -35,7 +35,7 @@
                     :value="item.areaCode">
                   </el-option>
                 </el-select>
-                <el-select v-model="form.city" placeholder="请选择市">
+                <el-select v-model="cityCode" placeholder="请选择市">
                   <el-option
                     v-for="(item, index) in areaCList"
                     :key="index"
@@ -43,7 +43,7 @@
                     :value="item.areaCode">
                   </el-option>
                 </el-select>
-                <el-select v-model="form.area" placeholder="请选择区/县">
+                <el-select v-model="areaCode" placeholder="请选择区/县">
                   <el-option
                     v-for="(item, index) in areaQList"
                     :key="index"
@@ -54,8 +54,8 @@
               </el-form-item>
             </div>
             <div class="mark">
-              <el-form-item label="备注：" prop="mark">
-                <el-input type="textarea" v-model="form.mark"></el-input>
+              <el-form-item label="备注：" prop="remark">
+                <el-input type="textarea" v-model="form.remark"></el-input>
               </el-form-item>
             </div>
             <el-form-item>
@@ -77,23 +77,26 @@ export default {
   data () {
     return {
       form: {
-        componyName: '',
-        user: '',
-        phone: '',
+        companyName: '',
+        contactPerson: '',
+        contactPhone: '',
         province: '',
         city: '',
         area: '',
-        mark: ''
+        remark: ''
       },
+      provinceCode: '',
+      cityCode: '',
+      areaCode: '',
       areaPList: [],
       areaCList: [],
       areaQList: [],
       rules: {
-        componyName: [
+        companyName: [
           // { required: true, message: '请输入活动名称', trigger: 'blur' },
           // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
-        phone: [
+        contactPhone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' },
           { min: 11, max: 11, message: '手机号不合法', trigger: 'blur' }
         ]
@@ -106,22 +109,24 @@ export default {
     this.QueryAreaList(obj, 'province')
   },
   computed: {
-    provinceCode () {
-      return this.form.province
-    },
-    cityCode () {
-      return this.form.city
-    }
+    // provinceCode () {
+    //   return this.form.province
+    // },
+    // cityCode () {
+    //   return this.form.city
+    // }
   },
   watch: {
     provinceCode (newVal, oldVal) {
       if (newVal !== oldVal) {
         // this.form.addressSaveData.provinceCode = newVal
         this.areaPList.forEach(item => {
-          if (this.form.city !== item) {
-            this.form.city = ''
+          if (newVal === item.areaCode) {
+            this.form.province = item.areaName
+          }
+          if (this.cityCode !== item) {
+            this.cityCode = ''
           } else {
-
           }
         })
         this.QueryAreaList({areaParentCode: newVal}, 'city')
@@ -131,13 +136,25 @@ export default {
       if (newVal !== oldVal) {
         // this.form.addressSaveData.cityCode = newVal
         this.areaCList.forEach(item => {
-          if (this.form.area !== item) {
-            this.form.area = ''
+          if (newVal === item.areaCode) {
+            this.form.city = item.areaName
+          }
+          if (this.areaCode !== item) {
+            this.areaCode = ''
           } else {
 
           }
         })
         this.QueryAreaList({areaParentCode: newVal}, 'area')
+      }
+    },
+    areaCode (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.areaQList.forEach(item => {
+          if (newVal === item.areaCode) {
+            this.form.area = item.areaName
+          }
+        })
       }
     }
   },
@@ -164,8 +181,14 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.form)
-          debugger
-          alert('submit!')
+          ApplyForAjax.insertApplication(this.form).then(res => {
+            if (res.code === 200) {
+              this.$notify({
+                type: 'success',
+                message: '申请成功'
+              })
+            }
+          })
         } else {
           console.log('error submit!!')
           return false

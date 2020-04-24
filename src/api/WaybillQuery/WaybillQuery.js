@@ -6,9 +6,9 @@ const SiteManageAjax = {
     let result = PostFromData('/crm/Station/show/StationDetails', params)
     return result
   },
-  updateStation (params) {
-    // 修改站点
-    let result = Post('/crm/Station/update/updateCrmLogisticsStation', params)
+  QueryRoute (params) {
+    // 物流官网根据运单号码运行轨迹查询
+    let result = PostFromData('/waybill/api/waybillTrajectory/select/officialWaybillTrajectory', params)
     return result
   },
   insertApplication (params) {

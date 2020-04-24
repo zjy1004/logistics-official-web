@@ -9,10 +9,16 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/flexible/flexible.js'
 import '@/style/reset.less'
+import '@/style/common-active.css'
+import '../theme/index.css'
+import '@/style/base.less'
+import '@/style/index.css'
+import { baseFn } from './components/BaseFn/BaseFn'
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
+Vue.use(baseFn)
 
 /* eslint-disable no-new */
 new Vue({

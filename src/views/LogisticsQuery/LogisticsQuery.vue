@@ -6,7 +6,7 @@
          <div class="w-input">
            <el-input
             placeholder="请输入运单号进行查询"
-            v-model="searchVal">
+            v-model="form.waybillNumber">
           </el-input>
          </div>
          <div class="w-icon" @click="delWaybill()">
@@ -17,35 +17,30 @@
      </div>
      <div class="q-route">
        <div class="route-wrap">
-         <div id="map-container" class="r-map">1</div>
+         <div id="map-container" class="r-map"></div>
          <div class="r-info">
-           <div class="i-top">
+           <div class="i-top"  v-show="infoShow">
              <div>
                 <span class="t-span-left">运单号:</span>
-                <span class="t-span-right">289840466019</span>
+                <span class="t-span-right">{{waybillNumber}}</span>
              </div>
              <div class="empty-box"></div>
              <div>
                <span class="t-span-left">签收时间:</span>
-              <span class="t-span-right">2019-09-05 12:32:01</span>
+              <span class="t-span-right">{{submissionTime}}</span>
              </div>
-             <!-- <span class="t-span-left">运单号:</span>
-             <span class="t-span-right">289840466019</span>
-             <span class="t-span-left" style="margin-left: 94px;">签收时间:</span>
-             <span class="t-span-left">签收时间:</span>
-             <span class="t-span-right">2019-09-05 12:32:01</span> -->
            </div>
-           <div class="i-bottom">
-             <div class="b-text">杭州市</div>
+           <div class="i-bottom"  v-show="infoShow">
+             <div class="b-text">{{sendClientName}}</div>
              <div class="b-icon">
-               <!-- <img src="../../images/orange.png" alt=""> -->
                </div>
-             <div class="b-text">北京市</div>
+             <div class="b-text">{{receiveClientName}}</div>
            </div>
          </div>
-         <div class="r-desc">
+        <div class="r-desc">
            <time-line
-            :dataArr=activities
+            v-show="infoShow"
+            :dataArr=waybillTransportInfoList
           />
          </div>
        </div>
@@ -55,9 +50,10 @@
 
 <script type="">
 import MapLoader from '@/assets/AMap.js'
-import posIcon from '@/images/pos-icon.gif'
+// import posIcon from '@/images/pos-icon.gif'
 import carIcon from '@/images/car2.gif'
 import TimeLine from '@/components/TimeLine/TimeLine'
+import WaybillQueryAjax from '@/api/WaybillQuery/WaybillQuery.js'
 export default {
   name: 'LogisticsQuery',
   components: {
@@ -65,36 +61,67 @@ export default {
   },
   data () {
     return {
-      searchVal: '',
-      activities: [
-        { i: '已签收', status: 1, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
-        { i: '运输中', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
-        { i: '分拣中', status: 1, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
-        { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
-        { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
-        { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
-        { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
-        { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' },
-        { i: '已签收', status: 0, content: '支持使用图标', timestamp: '2018-04-12 20:46' }
-      ],
-      endName: '长沙市',
+      form: {
+        waybillNumber: ''
+      },
+      infoShow: false,
+      waybillNumber: '',
+      receiveClientName: '',
+      sendClientName: '',
+      submissionTime: '',
+      waybillTransportInfoList: [], // 途径信息
+      waybillTrajectoryList: [], // 运单轨迹list
       map: null,
       mapOption: {
         resizeEnable: true,
         center: ['116.23661', '40.06667'],
-        zoom: 13
+        zoom: 4
       },
-      startPosition: ['116.407387', '39.904179'],
-      driverPosition: ['113.625351', '34.746303'],
-      endPosition: ['114.075031', '32.123274']
+      // startPosition: ['112.938888', '28.228272'],
+      // driverPosition: ['113.625351', '34.746303'],
+      // endPosition: ['116.407387', '39.904179']
+      startPosition: ['', ''],
+      driverPosition: ['', ''],
+      endPosition: ['', '']
     }
   },
   methods: {
     delWaybill () {
-      this.searchVal = ''
+      this.form.waybillNumber = ''
     },
     search () {
-      this.mapInit('search')
+      if (this.form.waybillNumber === '') {
+        this.$notify({
+          type: 'error',
+          message: '运单号不能为空！'
+        })
+      } else {
+        WaybillQueryAjax.QueryRoute({waybillNumber: this.form.waybillNumber}).then(res => {
+          if (res.code === 200) {
+            if (res.data !== null && res.data !== '') {
+              this.waybillTransportInfoList = res.data.waybillTransportInfoList.map((item, index) => {
+                if (index === 0) {
+                  item.size = 'large'
+                  item.type = 'primary'
+                }
+                return item
+              })
+              this.waybillTrajectoryList = res.data.waybillTrajectoryList
+              this.sendClientName = res.data.sendClientName
+              this.receiveClientName = res.data.receiveClientName
+              this.submissionTime = res.data.submissionTime
+              this.waybillNumber = res.data.waybillNumber
+              this.startPosition[0] = res.data.waybillTrajectoryList[0].longitude
+              this.startPosition[1] = res.data.waybillTrajectoryList[0].latitude
+              this.driverPosition[0] = res.data.waybillTrajectoryList[0].longitude
+              this.driverPosition[1] = res.data.waybillTrajectoryList[0].latitude
+              this.endPosition[0] = res.data.waybillTrajectoryList[this.waybillTrajectoryList.length - 1].longitude
+              this.endPosition[1] = res.data.waybillTrajectoryList[this.waybillTrajectoryList.length - 1].latitude
+              this.mapInit('search')
+            }
+          }
+        })
+      }
     },
     mapInit (flag) {
       MapLoader().then(AMap => {
@@ -107,14 +134,14 @@ export default {
         // this.initDefaultRoute(AMap)
         // this.setNewCenter()
         if (flag === 'default') {
-          this.drawDefaultMarker(AMap)
-          this.initDefaultRoute(AMap)
-          this.setNewCenter()
+          // this.drawDefaultMarker(AMap)
+          // this.initDefaultRoute(AMap)
+          // this.setNewCenter()
         }
         if (flag === 'search') {
           this.drawMarker(AMap)
-          this.initRoute(AMap)
-          this.drawLine([this.startPosition, this.driverPosition], AMap, 'real')
+          // this.initRoute(AMap)
+          // this.drawLine([this.startPosition, this.driverPosition], AMap, 'real')
           this.setNewCenter()
         }
       }, e => {
@@ -157,9 +184,10 @@ export default {
         draggable: false, // 设置点标记是否可拖拽移动，默认为false
         position: this.startPosition, // 点标记在地图上显示的位置，默认为地图中心点
         riseOnHover: true,
+        title: '发货方',
         icon: new AMap.Icon({
-          size: new AMap.Size(35, 40), // 图标的大小
-          image: posIcon
+          size: new AMap.Size(0, 0), // 图标的大小
+          image: ''
         }),
         autoRotation: true,
         angle: 0
@@ -170,7 +198,7 @@ export default {
         position: new AMap.LngLat(this.driverPosition[0], this.driverPosition[1]),
         riseOnHover: true,
         icon: new AMap.Icon({
-          size: new AMap.Size(35, 40), // 图标的大小
+          size: new AMap.Size(75, 80), // 图标的大小
           image: carIcon
         }),
         autoRotation: true,
@@ -182,17 +210,23 @@ export default {
         position: this.endPosition,
         riseOnHover: true,
         title: '收货方',
-        // icon: new AMap.Icon({
-        //   size: new AMap.Size(35, 40), // 图标的大小
-        //   image: posIcon
-        // }),
+        icon: new AMap.Icon({
+          size: new AMap.Size(0, 0), // 图标的大小
+          image: ''
+        }),
         autoRotation: true,
         angle: 0
+      })
+      startMarker.setLabel({
+        offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
+        // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
+        content: `<div class='send-info'>发</div>`, // 设置文本标注内容
+        direction: 'right' // 设置文本标注方位
       })
       endMarker.setLabel({
         offset: new AMap.Pixel(-3, 0), // 设置文本标注偏移量
         // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
-        content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
+        content: `<div class='rec-info'>收</div>`, // 设置文本标注内容
         direction: 'right' // 设置文本标注方位
       })
       this.map.add([startMarker, driverMarker, endMarker])
@@ -204,10 +238,11 @@ export default {
         draggable: false, // 设置点标记是否可拖拽移动，默认为false
         position: this.startPosition, // 点标记在地图上显示的位置，默认为地图中心点
         riseOnHover: true,
-        icon: new AMap.Icon({
-          size: new AMap.Size(35, 40), // 图标的大小
-          image: posIcon
-        }),
+        title: '发货方',
+        // icon: new AMap.Icon({
+        //   size: new AMap.Size(35, 40), // 图标的大小
+        //   image: posIcon
+        // }),
         autoRotation: true,
         angle: 0
       })
@@ -224,10 +259,16 @@ export default {
         autoRotation: true,
         angle: 0
       })
-      endMarker.setLabel({
-        offset: new AMap.Pixel(-3, 0), // 设置文本标注偏移量
+      startMarker.setLabel({
+        offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
         // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
-        content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
+        content: `<div class='send-info'>发</div>`, // 设置文本标注内容
+        direction: 'right' // 设置文本标注方位
+      })
+      endMarker.setLabel({
+        offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
+        // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
+        content: `<div class='rec-info'>收</div>`, // 设置文本标注内容
         direction: 'right' // 设置文本标注方位
       })
       this.map.add([startMarker, endMarker])
@@ -492,17 +533,34 @@ export default {
         background: #fff;
         opacity: 1;
         padding: 0;
+        z-index: -201;
+        .rec-info {
+          height: 25px;
+          width: 25px;
+          text-align: center;
+          line-height: 25px;
+          background-color: #FF9900;
+          color: #fff;
+          font-size: 14px;
+          font-weight: bold;
+           z-index: -201;
+        }
+        .send-info {
+          height: 25px;
+          line-height: 25px;
+          width: 25px;
+          text-align: center;
+          background-color: #33cccc;
+          color: #fff;
+          font-size: 14px;
+          font-weight: bold;
+        }
         .info{
           font-weight: bold;
-          // width: 80px;
-          // height: 25px;
           text-align: center;
-          // line-height: 25px;
           font-size: 14px;
           display: flex;
           border-radius: 5px;
-          // border: 1px solid #000;
-          // background-color: #FF9900;
           .i-left{
             width: 25px;
             height: 25px;
@@ -520,6 +578,7 @@ export default {
         }
       }
       .amap-icon{
+        z-index: 999;
         img{
           width: 90%!important;
           height: 100%!important;

@@ -1,7 +1,7 @@
 <template>
    <div class="time-line">
      <ul class="status">
-      <li class="status-item" :class="{'tl-active' : item.status === 1}" v-for="(item, index) in dataArr" :key="index">{{item.i}}</li>
+      <li class="status-item" :class="{'tl-active' : index === 0}" v-for="(item, index) in dataArr" :key="index">{{item.id}}</li>
     </ul>
     <el-timeline>
       <el-timeline-item
@@ -11,8 +11,8 @@
         :type="activity.type"
         :color="activity.color"
         :size="activity.size"
-        :timestamp="activity.timestamp">
-        {{activity.content}}
+        :timestamp="activity.operateTime">
+        {{activity.operate}}
       </el-timeline-item>
     </el-timeline>
    </div>
@@ -32,25 +32,37 @@ export default {
       activities: []
     }
   },
+  watch: {
+    dataArr: {
+      handler (newValue, oldValue) {
+        this.dataArr = newValue
+        this.$nextTick(() => {
+          this.addActiveClass()
+          // this.resetData()
+        })
+      },
+      deep: true
+    }
+  },
   components: {},
   created () {
-    this.resetData()
   },
   methods: {
     resetData () {
       this.dataArr.map((item, index) => {
-        if (item.status === 1) {
+        if (index === 0) {
           item.size = 'large'
           item.type = 'primary'
         }
         return item
       })
+      console.log(this.dataArr)
     },
     addActiveClass () {
       var timeArr = document.getElementsByClassName('el-timeline-item__timestamp')
       var contentArr = document.getElementsByClassName('el-timeline-item__content')
       this.dataArr.forEach((item, index) => {
-        if (item.status === 1) {
+        if (index === 0) {
           timeArr[index].classList.add('tl-active')
           contentArr[index].classList.add('tl-active')
         }
@@ -58,7 +70,11 @@ export default {
     }
   },
   mounted () {
-    this.addActiveClass()
+    // debugger
+    // this.$nextTick(() => {
+    //   this.addActiveClass()
+    //   this.resetData()
+    // })
   }
 }
 </script>
