@@ -1,7 +1,7 @@
 <template>
    <div class="time-line">
      <ul class="status">
-      <li class="status-item" :class="{'tl-active' : index === 0}" v-for="(item, index) in dataArr" :key="index">{{item.id}}</li>
+      <li class="status-item" :class="{'tl-active' : index === 0}" v-for="(item, index) in dataArr" :key="index">{{item.operateTypeName}}</li>
     </ul>
     <el-timeline>
       <el-timeline-item
@@ -70,7 +70,6 @@ export default {
     }
   },
   mounted () {
-    // debugger
     // this.$nextTick(() => {
     //   this.addActiveClass()
     //   this.resetData()

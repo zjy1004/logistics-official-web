@@ -70,7 +70,6 @@ export default {
   },
   methods: {
     toIndex () {
-      debugger
       this.$router.push({name: 'Index'})
     },
     mapInit () {

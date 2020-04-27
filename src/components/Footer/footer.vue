@@ -29,10 +29,10 @@
                <div class="img-wrap"><img src="../../images/云驿通客户二维码.png" alt=""></div>
                <div class="img-info common-text">云驿通客户APP</div>
               </div>
-             <div class="img-item ml50">
+             <!-- <div class="img-item ml50">
                <div class="img-wrap"><img src="../../images/云驿通客户二维码.png" alt=""></div>
                <div class="img-info common-text">云驿通客户小程序</div>
-              </div>
+              </div> -->
            </div>
          </div>
        </div>
@@ -141,7 +141,7 @@ export default {
           display: flex;
           margin-top: 29px;
           width: 400px;
-          justify-content: space-between;
+          // justify-content: space-between;
           .img-item {
             display: flex;
             flex-direction: column;
@@ -157,9 +157,9 @@ export default {
             width: 120px;
             text-align: center;
           }
-          // .ml50 {
-          //   margin-left: 40px;
-          // }
+          .ml50 {
+            margin-left: 50px;
+          }
         }
         .c-info {
           display: flex;

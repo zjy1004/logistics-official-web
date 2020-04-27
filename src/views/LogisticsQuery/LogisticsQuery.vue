@@ -51,7 +51,7 @@
 <script type="">
 import MapLoader from '@/assets/AMap.js'
 // import posIcon from '@/images/pos-icon.gif'
-import carIcon from '@/images/car2.gif'
+import carIcon from '@/images/trucks.gif'
 import TimeLine from '@/components/TimeLine/TimeLine'
 import WaybillQueryAjax from '@/api/WaybillQuery/WaybillQuery.js'
 export default {
@@ -74,15 +74,16 @@ export default {
       map: null,
       mapOption: {
         resizeEnable: true,
-        center: ['116.23661', '40.06667'],
-        zoom: 4
+        center: ['116.407387', '39.904179'],
+        zoom: 5
       },
       // startPosition: ['112.938888', '28.228272'],
       // driverPosition: ['113.625351', '34.746303'],
-      // endPosition: ['116.407387', '39.904179']
+      // endPosition: ['116.407387', '39.904179'],
       startPosition: ['', ''],
       driverPosition: ['', ''],
-      endPosition: ['', '']
+      endPosition: ['', ''],
+      realPath: []
     }
   },
   methods: {
@@ -96,53 +97,107 @@ export default {
           message: '运单号不能为空！'
         })
       } else {
-        WaybillQueryAjax.QueryRoute({waybillNumber: this.form.waybillNumber}).then(res => {
-          if (res.code === 200) {
-            if (res.data !== null && res.data !== '') {
-              this.waybillTransportInfoList = res.data.waybillTransportInfoList.map((item, index) => {
-                if (index === 0) {
-                  item.size = 'large'
-                  item.type = 'primary'
-                }
-                return item
-              })
-              this.waybillTrajectoryList = res.data.waybillTrajectoryList
-              this.sendClientName = res.data.sendClientName
-              this.receiveClientName = res.data.receiveClientName
-              this.submissionTime = res.data.submissionTime
-              this.waybillNumber = res.data.waybillNumber
-              this.startPosition[0] = res.data.waybillTrajectoryList[0].longitude
-              this.startPosition[1] = res.data.waybillTrajectoryList[0].latitude
-              this.driverPosition[0] = res.data.waybillTrajectoryList[0].longitude
-              this.driverPosition[1] = res.data.waybillTrajectoryList[0].latitude
-              this.endPosition[0] = res.data.waybillTrajectoryList[this.waybillTrajectoryList.length - 1].longitude
-              this.endPosition[1] = res.data.waybillTrajectoryList[this.waybillTrajectoryList.length - 1].latitude
-              this.mapInit('search')
-            }
-          }
-        })
+        this.mapInit('search')
       }
+    },
+    resetForm () {
+      return new Promise((resolve, reject) => {
+        this.waybillTransportInfoList = [] // 途径信息
+        this.waybillTrajectoryList = [] // 运单轨迹list
+        this.mapOption = {
+          resizeEnable: true,
+          center: ['116.407387', '39.904179'],
+          zoom: 10
+        }
+        this.startPosition = ['', '']
+        this.driverPosition = ['', '']
+        this.endPosition = ['', '']
+        this.realPath = []
+        resolve()
+      })
     },
     mapInit (flag) {
       MapLoader().then(AMap => {
         this.map = new AMap.Map('map-container', this.mapOption)
         this.setControlBar(AMap)
-        // this.drawMarker(AMap)
-        // this.initRoute(AMap)
-        // this.drawLine([this.startPosition, this.driverPosition], AMap, 'real')
-        // this.drawDefaultMarker(AMap)
-        // this.initDefaultRoute(AMap)
-        // this.setNewCenter()
         if (flag === 'default') {
-          // this.drawDefaultMarker(AMap)
-          // this.initDefaultRoute(AMap)
           // this.setNewCenter()
         }
         if (flag === 'search') {
-          this.drawMarker(AMap)
           // this.initRoute(AMap)
           // this.drawLine([this.startPosition, this.driverPosition], AMap, 'real')
-          this.setNewCenter()
+          this.resetForm().then(() => {
+            WaybillQueryAjax.QueryRoute({waybillNumber: this.form.waybillNumber}).then(res => {
+              if (res.code === 200) {
+                if (res.data !== null && res.data !== '') {
+                  this.infoShow = true
+                  let resData = res.data
+                  this.sendClientName = resData.sendClientName
+                  this.receiveClientName = resData.receiveClientName
+                  this.submissionTime = resData.submissionTime
+                  this.waybillNumber = resData.waybillNumber
+                  if (resData.waybillTransportInfoList !== null && resData.waybillTransportInfoList !== '') {
+                    this.waybillTransportInfoList = resData.waybillTransportInfoList.map((item, index) => {
+                      if (index === 0) {
+                        item.size = 'large'
+                        item.type = 'primary'
+                      }
+                      switch (item.operateType) {
+                        case 1:
+                          item.operateTypeName = '待发车'
+                          break
+                        case 2:
+                          item.operateTypeName = '运输中'
+                          break
+                        case 3:
+                          item.operateTypeName = '已签收'
+                          break
+                        case 4:
+                          item.operateTypeName = '已拒签'
+                          break
+                        default:
+                          break
+                      }
+                      return item
+                    })
+                  }
+                  if (resData.waybillTrajectoryList !== null && resData.waybillTrajectoryList !== '') {
+                    this.waybillTrajectoryList = resData.waybillTrajectoryList
+                    resData.waybillTrajectoryList.forEach((item, index) => {
+                      this.realPath.push([item.longitude, item.latitude])
+                    })
+                    if (this.realPath.length > 1) {
+                      this.drawLine(this.realPath, AMap, 'real')
+                    }
+                    let waybillTrajectoryLen = resData.waybillTrajectoryList.length
+                    if (waybillTrajectoryLen === 1) {
+                      this.driverPosition[0] = resData.waybillTrajectoryList[0].longitude
+                      this.driverPosition[1] = resData.waybillTrajectoryList[0].latitude
+                      this.endPosition[0] = resData.waybillTrajectoryList[0].longitude
+                      this.endPosition[1] = resData.waybillTrajectoryList[0].latitude
+                      this.drawMarker(AMap)
+                    } else if (waybillTrajectoryLen === 2) {
+                      this.startPosition[0] = resData.waybillTrajectoryList[0].longitude
+                      this.startPosition[1] = resData.waybillTrajectoryList[0].latitude
+                      this.driverPosition[0] = resData.waybillTrajectoryList[1].longitude
+                      this.driverPosition[1] = resData.waybillTrajectoryList[1].latitude
+                      this.endPosition[0] = resData.waybillTrajectoryList[1].longitude
+                      this.endPosition[1] = resData.waybillTrajectoryList[1].latitude
+                      this.drawMarker(AMap)
+                    } else if (waybillTrajectoryLen > 2) {
+                      this.startPosition[0] = resData.waybillTrajectoryList[0].longitude
+                      this.startPosition[1] = resData.waybillTrajectoryList[0].latitude
+                      this.driverPosition[0] = resData.waybillTrajectoryList[waybillTrajectoryLen - 1].longitude
+                      this.driverPosition[1] = resData.waybillTrajectoryList[waybillTrajectoryLen - 1].latitude
+                      this.endPosition[0] = resData.waybillTrajectoryList[waybillTrajectoryLen - 1].longitude
+                      this.endPosition[1] = resData.waybillTrajectoryList[waybillTrajectoryLen - 1].latitude
+                      this.drawMarker(AMap)
+                    }
+                  }
+                }
+              }
+            })
+          })
         }
       }, e => {
         console.log('地图加载失败', e)
@@ -179,128 +234,138 @@ export default {
     },
     // 绘制标记点
     drawMarker (AMap) {
-      let startMarker = new AMap.Marker({
-        map: this.map, // 要显示该marker的地图对象
-        draggable: false, // 设置点标记是否可拖拽移动，默认为false
-        position: this.startPosition, // 点标记在地图上显示的位置，默认为地图中心点
-        riseOnHover: true,
-        title: '发货方',
-        icon: new AMap.Icon({
-          size: new AMap.Size(0, 0), // 图标的大小
-          image: ''
-        }),
-        autoRotation: true,
-        angle: 0
+      let len = this.waybillTrajectoryList.length
+      let isReceive = this.waybillTransportInfoList.filter(item => {
+        return item.operateType === 3
       })
-      let driverMarker = new AMap.Marker({
-        map: this.map,
-        draggable: false,
-        position: new AMap.LngLat(this.driverPosition[0], this.driverPosition[1]),
-        riseOnHover: true,
-        icon: new AMap.Icon({
-          size: new AMap.Size(75, 80), // 图标的大小
-          image: carIcon
-        }),
-        autoRotation: true,
-        angle: 0
-      })
-      let endMarker = new AMap.Marker({
-        map: this.map,
-        draggable: false,
-        position: this.endPosition,
-        riseOnHover: true,
-        title: '收货方',
-        icon: new AMap.Icon({
-          size: new AMap.Size(0, 0), // 图标的大小
-          image: ''
-        }),
-        autoRotation: true,
-        angle: 0
-      })
-      startMarker.setLabel({
-        offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
-        // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
-        content: `<div class='send-info'>发</div>`, // 设置文本标注内容
-        direction: 'right' // 设置文本标注方位
-      })
-      endMarker.setLabel({
-        offset: new AMap.Pixel(-3, 0), // 设置文本标注偏移量
-        // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
-        content: `<div class='rec-info'>收</div>`, // 设置文本标注内容
-        direction: 'right' // 设置文本标注方位
-      })
-      this.map.add([startMarker, driverMarker, endMarker])
-    },
-    // 绘制标记点
-    drawDefaultMarker (AMap) {
-      let startMarker = new AMap.Marker({
-        map: this.map, // 要显示该marker的地图对象
-        draggable: false, // 设置点标记是否可拖拽移动，默认为false
-        position: this.startPosition, // 点标记在地图上显示的位置，默认为地图中心点
-        riseOnHover: true,
-        title: '发货方',
-        // icon: new AMap.Icon({
-        //   size: new AMap.Size(35, 40), // 图标的大小
-        //   image: posIcon
-        // }),
-        autoRotation: true,
-        angle: 0
-      })
-      let endMarker = new AMap.Marker({
-        map: this.map,
-        draggable: false,
-        position: this.endPosition,
-        riseOnHover: true,
-        title: '收货方',
-        // icon: new AMap.Icon({
-        //   size: new AMap.Size(35, 40), // 图标的大小
-        //   image: posIcon
-        // }),
-        autoRotation: true,
-        angle: 0
-      })
-      startMarker.setLabel({
-        offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
-        // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
-        content: `<div class='send-info'>发</div>`, // 设置文本标注内容
-        direction: 'right' // 设置文本标注方位
-      })
-      endMarker.setLabel({
-        offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
-        // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
-        content: `<div class='rec-info'>收</div>`, // 设置文本标注内容
-        direction: 'right' // 设置文本标注方位
-      })
-      this.map.add([startMarker, endMarker])
+      if (len === 1) {
+        if (isReceive) {
+          let endMarker = new AMap.Marker({
+            map: this.map,
+            draggable: false,
+            position: this.endPosition,
+            riseOnHover: true,
+            title: '收货方',
+            icon: new AMap.Icon({
+              size: new AMap.Size(0, 0), // 图标的大小
+              image: ''
+            }),
+            autoRotation: true,
+            angle: 0
+          })
+          endMarker.setLabel({
+            offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
+            // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
+            content: `<div class='rec-info'>收</div>`, // 设置文本标注内容
+            direction: 'right' // 设置文本标注方位
+          })
+          this.map.add(endMarker)
+          // this.map.setFitView(endMarker)
+          this.setNewCenter()
+        } else {
+          let driverMarker = new AMap.Marker({
+            map: this.map,
+            draggable: false,
+            position: new AMap.LngLat(this.driverPosition[0], this.driverPosition[1]),
+            riseOnHover: true,
+            icon: new AMap.Icon({
+              size: new AMap.Size(35, 40), // 图标的大小
+              image: carIcon
+            }),
+            autoRotation: true,
+            angle: 0
+          })
+          this.map.add(driverMarker)
+          // this.map.setFitView(driverMarker)
+          this.setNewCenter()
+        }
+      }
+      if (len > 1) {
+        if (isReceive) {
+          let startMarker = new AMap.Marker({
+            map: this.map, // 要显示该marker的地图对象
+            draggable: false, // 设置点标记是否可拖拽移动，默认为false
+            position: this.startPosition, // 点标记在地图上显示的位置，默认为地图中心点
+            riseOnHover: true,
+            title: '发货方',
+            icon: new AMap.Icon({
+              size: new AMap.Size(0, 0), // 图标的大小
+              image: ''
+            }),
+            autoRotation: true,
+            angle: 0
+          })
+          startMarker.setLabel({
+            offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
+            // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
+            content: `<div class='send-info'>发</div>`, // 设置文本标注内容
+            direction: 'right' // 设置文本标注方位
+          })
+          let endMarker = new AMap.Marker({
+            map: this.map,
+            draggable: false,
+            position: this.endPosition,
+            riseOnHover: true,
+            title: '收货方',
+            icon: new AMap.Icon({
+              size: new AMap.Size(0, 0), // 图标的大小
+              image: ''
+            }),
+            autoRotation: true,
+            angle: 0
+          })
+          endMarker.setLabel({
+            offset: new AMap.Pixel(-3, 0), // 设置文本标注偏移量
+            // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
+            content: `<div class='rec-info'>收</div>`, // 设置文本标注内容
+            direction: 'right' // 设置文本标注方位
+          })
+          this.map.add([startMarker, endMarker])
+          // this.map.setFitView([startMarker, endMarker])
+          this.setNewCenter()
+        } else {
+          let startMarker = new AMap.Marker({
+            map: this.map, // 要显示该marker的地图对象
+            draggable: false, // 设置点标记是否可拖拽移动，默认为false
+            position: this.startPosition, // 点标记在地图上显示的位置，默认为地图中心点
+            riseOnHover: true,
+            title: '发货方',
+            icon: new AMap.Icon({
+              size: new AMap.Size(0, 0), // 图标的大小
+              image: ''
+            }),
+            autoRotation: true,
+            angle: 0
+          })
+          startMarker.setLabel({
+            offset: new AMap.Pixel(0, 0), // 设置文本标注偏移量
+            // content: `<div class='info'><div class='i-left'>收</div><div class='i-right'>${this.endName}</div></div>`, // 设置文本标注内容
+            content: `<div class='send-info'>发</div>`, // 设置文本标注内容
+            direction: 'right' // 设置文本标注方位
+          })
+          let driverMarker = new AMap.Marker({
+            map: this.map,
+            draggable: false,
+            position: new AMap.LngLat(this.driverPosition[0], this.driverPosition[1]),
+            riseOnHover: true,
+            icon: new AMap.Icon({
+              size: new AMap.Size(45, 50), // 图标的大小
+              image: carIcon
+            }),
+            autoRotation: true,
+            angle: 0
+          })
+          this.map.add([startMarker, driverMarker])
+          // this.map.setFitView([startMarker, driverMarker])
+          this.setNewCenter()
+        }
+      }
     },
     // 根据司机坐标重新设置中心点
     setNewCenter () {
       let newCenter = this.map.setFitView()
       this.mapOption.center[0] = newCenter.pc.lng
       this.mapOption.center[1] = newCenter.pc.lat
-    },
-    // 绘制默认导航线路
-    initDefaultRoute (AMap) {
-      let drivingOption = {
-        policy: AMap.DrivingPolicy.LEAST_TIME, // 路线规划策略
-        ferry: 1, // 是否可以使用轮渡
-        hideMarkers: false,
-        showTraffic: true, // 是否显示实时路况信息
-        isOutline: true, // 是否显示描边
-        outlineColor: 'white', // 描边颜色
-        autoFitView: false // 是否自动调整视野
-      }
-      let driving = new AMap.Driving(drivingOption)
-      driving.search(new AMap.LngLat(this.startPosition[0], this.startPosition[1]), new AMap.LngLat(this.endPosition[0], this.endPosition[1]), (status, result) => {
-        if (status === 'complete') {
-          if (result.routes && result.routes.length) {
-            // 绘制第一条路线，也可以按需求绘制其它几条路线
-            this.drawDefaultLine(result.routes[0], AMap, 'project')
-          }
-        } else {
-          console.log('获取驾车数据失败：' + result)
-        }
-      })
     },
     // 绘制导航线路
     initRoute (AMap) {
@@ -355,19 +420,6 @@ export default {
       }
       // 调整视野达到最佳显示区域
       // this.map.setFitView([ startMarker, endMarker, routeLine ])
-    },
-    drawDefaultLine (route, AMap) {
-      let path = this.parseRouteToPath(route)
-      let routeLine = new AMap.Polyline({
-        path: path,
-        isOutline: true,
-        outlineColor: '#ffeeee',
-        borderWeight: 2,
-        strokeWeight: 4,
-        strokeColor: '#5677fc',
-        lineJoin: 'round'
-      })
-      routeLine.setMap(this.map)
     },
     parseRouteToPath (route) {
       let path = []
@@ -461,11 +513,8 @@ export default {
         border-bottom: 1px solid rgba(241,241,241,1);
         .i-top {
           height: 20px;
-          // line-height: 20px;
-          // width: 480px;
           display: flex;
           align-items: center;
-          // justify-content: space-between;
           .t-span-left { font-size:14px; color:rgba(150,154,169,1); }
           .t-span-right { font-size:14px; color:rgb(10,22,51,1); margin-left: 12px;}
           .empty-box { width: 94px; height: 20px; }
@@ -533,7 +582,6 @@ export default {
         background: #fff;
         opacity: 1;
         padding: 0;
-        z-index: -201;
         .rec-info {
           height: 25px;
           width: 25px;
@@ -543,7 +591,6 @@ export default {
           color: #fff;
           font-size: 14px;
           font-weight: bold;
-           z-index: -201;
         }
         .send-info {
           height: 25px;
@@ -555,30 +602,29 @@ export default {
           font-size: 14px;
           font-weight: bold;
         }
-        .info{
-          font-weight: bold;
-          text-align: center;
-          font-size: 14px;
-          display: flex;
-          border-radius: 5px;
-          .i-left{
-            width: 25px;
-            height: 25px;
-            line-height: 25px;
-            background-color: #FF9900;
-            color: #fff;
-          }
-          .i-right{
-            width: 55px;
-            height: 25px;
-            line-height: 25px;
-            background-color: #fff;
-            color: #000;
-          }
-        }
+        // .info{
+        //   font-weight: bold;
+        //   text-align: center;
+        //   font-size: 14px;
+        //   display: flex;
+        //   border-radius: 5px;
+        //   .i-left{
+        //     width: 25px;
+        //     height: 25px;
+        //     line-height: 25px;
+        //     background-color: #FF9900;
+        //     color: #fff;
+        //   }
+        //   .i-right{
+        //     width: 55px;
+        //     height: 25px;
+        //     line-height: 25px;
+        //     background-color: #fff;
+        //     color: #000;
+        //   }
+        // }
       }
       .amap-icon{
-        z-index: 999;
         img{
           width: 90%!important;
           height: 100%!important;

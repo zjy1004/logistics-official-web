@@ -7,7 +7,7 @@
       </ul>
       <div class="h-left">
         <ul class="l-text">
-          <li class="t-left"><a href="https://wl.autozi.com/">商家后台</a></li>
+          <li class="t-left"><a href="https://wl.autozi.com/">物流云平台</a></li>
           <!-- <li class="t-line"></li>
           <li class="t-right">物流货源推荐</li> -->
         </ul>
@@ -157,6 +157,7 @@ export default {
             font-weight:400;
             color:rgba(107,111,126,1);
           }
+          a:hover { color: rgba(58,98,244,1) }
         }
         .t-line {
           width:1px;

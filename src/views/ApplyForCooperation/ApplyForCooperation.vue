@@ -9,7 +9,7 @@
           <span>申请合作</span>
         </div>
          <div class="w-form">
-           <el-form :model="form" :rules="rules" ref="form" label-width="100px">
+           <el-form :model="form" :rules="rules" ref="form" label-width="120px">
              <div class="input-class">
                <el-form-item label="公司名称:" prop="companyName">
                 <el-input v-model="form.companyName" placeholder="请输入公司名称"></el-input>
@@ -210,12 +210,13 @@ export default {
   min-width: 1280px;
   .af-banner { min-width: 1280px; height: 422px; }
   .af-content {
-    height: 690px;
+    min-height: 690px;
     background: rgba(246,248,251,1);
     display: flex;
     justify-content: center;
     .con-wrap {
       width: 1200px;
+      // min-height: 690px;
       .w-nav {
         width: 100%;
         height: 50px;
@@ -224,9 +225,9 @@ export default {
       }
       .w-form {
         width: 100%;
-        height: 590px;
+        min-height: 590px;
         background: #fff;
-        padding: 55px 0 0 190px;
+        padding: 55px 0 0 170px;
       }
     }
   }
