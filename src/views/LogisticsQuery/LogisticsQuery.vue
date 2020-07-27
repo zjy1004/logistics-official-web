@@ -25,7 +25,7 @@
                 <span class="t-span-right">{{waybillNumber}}</span>
              </div>
              <div class="empty-box"></div>
-             <div>
+             <div v-show="isReceive">
                <span class="t-span-left">签收时间:</span>
               <span class="t-span-right">{{submissionTime}}</span>
              </div>
@@ -75,7 +75,7 @@ export default {
       mapOption: {
         resizeEnable: true,
         center: ['116.407387', '39.904179'],
-        zoom: 5
+        zoom: 10
       },
       // startPosition: ['112.938888', '28.228272'],
       // driverPosition: ['113.625351', '34.746303'],
@@ -84,6 +84,13 @@ export default {
       driverPosition: ['', ''],
       endPosition: ['', ''],
       realPath: []
+    }
+  },
+  computed: {
+    isReceive () {
+      return this.waybillTransportInfoList.some(item => {
+        return item.operateType === 3
+      })
     }
   },
   methods: {
@@ -102,6 +109,11 @@ export default {
     },
     resetForm () {
       return new Promise((resolve, reject) => {
+        this.infoShow = false
+        this.receiveClientName = ''
+        this.sendClientName = ''
+        this.waybillNumber = ''
+        this.submissionTime = ''
         this.waybillTransportInfoList = [] // 途径信息
         this.waybillTrajectoryList = [] // 运单轨迹list
         this.mapOption = {
@@ -235,11 +247,8 @@ export default {
     // 绘制标记点
     drawMarker (AMap) {
       let len = this.waybillTrajectoryList.length
-      let isReceive = this.waybillTransportInfoList.filter(item => {
-        return item.operateType === 3
-      })
       if (len === 1) {
-        if (isReceive) {
+        if (this.isReceive) {
           let endMarker = new AMap.Marker({
             map: this.map,
             draggable: false,
@@ -281,7 +290,7 @@ export default {
         }
       }
       if (len > 1) {
-        if (isReceive) {
+        if (this.isReceive) {
           let startMarker = new AMap.Marker({
             map: this.map, // 要显示该marker的地图对象
             draggable: false, // 设置点标记是否可拖拽移动，默认为false
@@ -444,7 +453,7 @@ export default {
   .q-search {
     min-width: 1280px;
     height: 310px;
-    background: url('../../images/物流查询.png') no-repeat;
+    background: url('../../images/wlcx.png') no-repeat;
     background-size: 100% 100%;
     display: flex;
     flex-direction: column;

@@ -2,10 +2,10 @@
    <div class="footer">
      <div class="f-con">
        <div class="c-left">
-         <div class="l-phone">400-008-8122</div>
+         <div class="l-phone">400-180-9223</div>
          <div class="l-date common-text">周一至周日：9:00-18:00</div>
          <div class="l-email common-text">邮箱：Servie@autozi.com</div>
-         <div class="l-web common-text">网址：www.wlautozi.com</div>
+         <div class="l-web common-text">网址：w.autozi.com</div>
          <div class="l-address common-text">地址：北京市海淀区北清路68号用友软件园中区9号楼</div>
        </div>
        <div class="c-right">
@@ -37,7 +37,7 @@
          </div>
        </div>
      </div>
-     <div class="f-bottom">京公网安备11010802025642 | 京ICP备11020175号-4 | 京ICP证130186号 Copyright ©Autozi.com 2019 All Rights Reserved. Powered by Autozi</div>
+     <div class="f-bottom">京公网安备11010802025642 | 京ICP备11020175号-4 | 京ICP证130186号 Copyright ©Autozi.com 2020 All Rights Reserved. Powered by Autozi</div>
    </div>
 </template>
 

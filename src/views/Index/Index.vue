@@ -102,7 +102,7 @@
      <!-- sever-start -->
      <div class="index-sever">
        <div class="sever-item item-position1">
-         <div class="s-inner-img"><img src="../../images/首页-金融服务.png" alt=""></div>
+         <div class="s-inner-img"><img src="../../images/index-jr.png" alt=""></div>
          <div class="s-inner-item">
            <div class="item-tltle">金融服务</div>
             <div class="item-icon"></div>
@@ -110,7 +110,7 @@
          </div>
        </div>
        <div class="sever-item item-position2">
-         <div class="s-inner-img item-position1"><img src="../../images/首页-营销服务.png" alt=""></div>
+         <div class="s-inner-img item-position1"><img src="../../images/index-yx.png" alt=""></div>
          <div class="s-inner-item">
           <div class="item-tltle">营销服务</div>
           <div class="item-icon"></div>
@@ -118,7 +118,7 @@
          </div>
        </div>
        <div class="sever-item item-position3">
-         <div class="s-inner-img"><img src="../../images/首页-信息服务.png" alt=""></div>
+         <div class="s-inner-img"><img src="../../images/index-xx.png" alt=""></div>
          <div class="s-inner-item">
            <div class="item-tltle">信息服务</div>
           <div class="item-icon"></div>
@@ -126,7 +126,7 @@
          </div>
        </div>
        <div class="sever-item item-position4">
-         <div class="s-inner-img"><img src="../../images/首页-更多服务.png" alt=""></div>
+         <div class="s-inner-img"><img src="../../images/index-gd.png" alt=""></div>
          <div class="s-inner-item">
           <div class="item-tltle">更多服务</div>
           <div class="item-icon"></div>

@@ -7,13 +7,13 @@
       </ul>
       <div class="h-left">
         <ul class="l-text">
-          <li class="t-left"><a href="https://wl.autozi.com/">物流云平台</a></li>
+          <li class="t-left"><a  target="_Blank" href="https://wl.autozi.com/">物流云平台<span class="t-icon"></span></a></li>
           <!-- <li class="t-line"></li>
           <li class="t-right">物流货源推荐</li> -->
         </ul>
         <div class="h-phone">
           <div class="p-icon"><img src="../../images/Telephone-icon.png" alt=""></div>
-          <div class="p-num">400-008-8122</div>
+          <div class="p-num">400-180-9223</div>
         </div>
       </div>
      </div>
@@ -145,19 +145,33 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        li {
-          line-height: 15px;
-          height: 15px;
-          width: auto;
-        }
+        // li {
+        //   line-height: 15px;
+        //   height: 15px;
+        //   width: auto;
+        // }
         .t-left {
           a {
             text-decoration: none;
             font-size:14px;
             font-weight:400;
+            height: 22px;
+            line-height: 22px;
+            display: block;
             color:rgba(107,111,126,1);
+            display: flex;
+            align-items: center;
+          }
+          .t-icon {
+            display: block;
+            width:18px;
+            height: 18px;
+            margin-left: 2px;
+            background: url('../../images/登录.png') no-repeat;
+            background-size: 100% 100%;
           }
           a:hover { color: rgba(58,98,244,1) }
+          a:hover .t-icon{ background: url('../../images/登录激活.png') no-repeat;  background-size: 100% 100%;}
         }
         .t-line {
           width:1px;

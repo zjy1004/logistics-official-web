@@ -8,31 +8,31 @@ const routes = [
     path: '/',
     name: 'Index',
     component: () => import('@/views/Index/Index'),
-    meta: {auth: true, title: '首页'}
+    meta: {auth: true, title: '中驰物联'}
   },
   {
     path: '/logistics-query',
     name: 'LogisticsQuery',
     component: () => import('@/views/LogisticsQuery/LogisticsQuery'),
-    meta: {auth: true, title: '物流查询'}
+    meta: {auth: true, title: '物流查询-中驰物联'}
   },
   {
     path: '/partner',
     name: 'Partner',
     component: () => import('@/views/Partner/Partner'),
-    meta: {auth: true, title: '合作伙伴'}
+    meta: {auth: true, title: '合作伙伴-中驰物联'}
   },
   {
     path: '/about-us',
     name: 'AboutUs',
     component: () => import('@/views/AboutUs/AboutUs'),
-    meta: {auth: true, title: '关于我们'}
+    meta: {auth: true, title: '关于我们-中驰物联'}
   },
   {
     path: '/apply-for-cooperation',
     name: 'ApplyForCooperation',
     component: () => import('@/views/ApplyForCooperation/ApplyForCooperation'),
-    meta: {auth: true, title: '申请合作'}
+    meta: {auth: true, title: '申请合作-中驰物联'}
   }
   // {
   //   path: '/',

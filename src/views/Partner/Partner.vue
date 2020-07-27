@@ -1,7 +1,7 @@
 <template>
    <div class="partner">
      <div class="p-banner">
-       <img src="../../images/合作伙伴banner.jpg" alt="">
+       <img src="../../images/hzhbbanner.jpg" alt="">
      </div>
      <div class="p-map">
        <img src="../../images/map.png" alt="">

@@ -1,6 +1,6 @@
 <template>
    <div class="about-us">
-     <div class="us-banner"><img src="../../images/关于我们banner.jpg" alt=""></div>
+     <div class="us-banner"><img src="../../images/gywmbanner.jpg" alt=""></div>
      <div class="us-info">
        <div class="info-wrap">
         <div class="w-nav">
@@ -11,7 +11,7 @@
         <div class="w-content">
           <div class="c-company">
             <div class="com-name">中驰物联科技有限公司</div>
-            <div class="com-info">中驰物联科技有限公司是专注于垂直汽配汽配物流细分领域，以物流4PL服务商为基础的依托互联网手段承载及服务于汽配供应商和终端维保企业的供应链云平台。既不是一个传统的服务商（自营或控股实施干线/专线/城配线路的运营商），也不是以物流资源整合方式的综合物流服务商，而是以互联网技术为手段提升物流运作与协同效率的公共服务平台。</div>
+            <div class="com-info">中驰物联科技有限公司是专注于垂直汽配汽配物流细分领域，以物流4PL服务商为基础的依托互联网手段承载及服务于汽配供应商和终端维保企业的供应链云平台。既不是一个传统的服务商（自营或控股实施干线/专线/城配线路的运营商），而是一个以物流资源整合方式的综合物流服务商，进而成为一个以互联网技术为手段提升物流运作与协同效率的公共服务平台。</div>
             <ul class="com-desc">
               <li class="desc-item">
                 <div class="item-icon"><img src="../../images/auxiliary-icon.png" alt=""></div>
@@ -37,11 +37,11 @@
             </div>
             <div class="com-tel">
             <span class="com-left-span">联系电话：</span>
-            <span class="com-right-span">400-008-8122</span>
+            <span class="com-right-span">400-180-9223</span>
             </div>
             <div class="com-web">
             <span class="com-left-span">官网：</span>
-            <span class="com-right-span">www.wlautozi.com</span>
+            <span class="com-right-span">w.autozi.com</span>
             </div>
             <div id="map-us" class="com-map"></div>
           </div>
@@ -119,12 +119,13 @@ export default {
   min-width: 1280px;
   .us-banner { min-width: 1280px; height: 422px; }
   .us-info {
-    height: 1107px;
+    // min-height: 1107px;
     background: rgba(246,248,251,1);
     display: flex;
     justify-content: center;
     .info-wrap {
       width: 1200px;
+      margin-bottom: 60px;
       .w-nav {
         width: 100%;
         height: 50px;
@@ -133,7 +134,7 @@ export default {
       }
       .w-content {
         width: 100%;
-        height: 996px;
+        // min-height: 996px;
         background: rgba(255,255,255,1);
         display: flex;
         flex-direction: column;
@@ -158,7 +159,7 @@ export default {
           .com-web { margin-top: 18px; }
           .com-left-span { font-size:14px; color: #0A1633; }
           .com-right-span { font-size:14px; color: #6B6F7E; }
-          .com-map { width: 1100px; height: 370px; margin-top: 27px; }
+          .com-map { width: 1100px; height: 370px; margin-top: 27px; margin-bottom: 60px; }
         }
       }
     }

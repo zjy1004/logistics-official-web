@@ -1,6 +1,6 @@
 <template>
    <div class="apply-for">
-     <div class="af-banner"><img src="../../images/申请合作banner.jpg" alt=""></div>
+     <div class="af-banner"><img src="../../images/sqhzbanner.jpg" alt=""></div>
      <div class="af-content">
        <div class="con-wrap">
          <div class="w-nav">
@@ -187,19 +187,19 @@ export default {
                 type: 'success',
                 message: '申请成功'
               })
+              this.resetForm('form')
             }
           })
         } else {
-          console.log('error submit!!')
-          return false
+          // return false
         }
       })
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
-      this.form.province = ''
-      this.form.city = ''
-      this.form.area = ''
+      this.provinceCode = ''
+      this.cityCode = ''
+      this.areaCode = ''
     }
   }
 }
